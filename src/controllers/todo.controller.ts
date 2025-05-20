@@ -73,6 +73,7 @@ export const todoController = {
     }
   },
 
+  // Delete a todo
   delete: async (req: Request, res: Response) => {
     const { id } = req.params;
 
