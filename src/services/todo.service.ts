@@ -1,6 +1,6 @@
 import { db } from '../db';
 import { todos } from '../db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { Todo } from '../types/todo';
 
 export class TodoService {
@@ -42,5 +42,41 @@ export class TodoService {
       .where(eq(todos.id, id))
       .returning();
     return todo as Todo;
+  }
+
+  async createBatch(todoList: { title: string; description?: string }[]): Promise<Todo[]> {
+    const [createdTodos] = await db.insert(todos)
+      .values(todoList)
+      .returning();
+      
+    return createdTodos as Todo[];
+  }
+
+  async updateBatch(updates: { id: number; data: Partial<Todo> }[]): Promise<Todo[]> {
+    const updatedTodos: Todo[] = [];
+    
+    for (const update of updates) {
+      const [todo] = await db.update(todos)
+        .set({
+          ...update.data,
+          updatedAt: new Date(),
+        })
+        .where(eq(todos.id, update.id))
+        .returning();
+      
+      if (todo) {
+        updatedTodos.push(todo as Todo);
+      }
+    }
+    
+    return updatedTodos;
+  }
+
+  async deleteBatch(ids: number[]): Promise<Todo[]> {
+    const [deletedTodos] = await db.delete(todos)
+      .where(inArray(todos.id, ids))
+      .returning();
+      
+    return deletedTodos as Todo[];
   }
 } 
