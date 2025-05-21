@@ -7,8 +7,10 @@
     "start": "NODE_ENV=production node dist/index.js",
     "dev": "NODE_ENV=development nodemon -r dotenv/config src/index.ts",
     "build": "tsc",
-    "db:generate": "drizzle-kit generate:pg",
-    "db:push": "drizzle-kit push:pg",
+    "db:generate:dev": "NODE_ENV=development drizzle-kit generate:pg",
+    "db:generate:prod": "NODE_ENV=production drizzle-kit generate:pg",
+    "db:push:dev": "NODE_ENV=development drizzle-kit push:pg",
+    "db:push:prod": "NODE_ENV=production drizzle-kit push:pg",
     "db:drop": "tsx src/db/drop-table.ts"
   },
   "author": "",
