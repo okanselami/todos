@@ -10,7 +10,8 @@
     "test": "jest",
     "db:generate": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
-    "db:drop": "tsx src/db/drop-table.ts"
+    "db:drop": "tsx src/db/drop-table.ts",
+    "postinstall": "dotenv -e .env.production drizzle-kit push:pg"
   },
   "author": "",
   "license": "ISC",

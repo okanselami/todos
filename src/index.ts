@@ -14,7 +14,6 @@ dotenv.config({
 
 const app = express();
 const port = process.env.PORT || 3002;
-const apiPrefix = process.env.API_PREFIX || '/api/v1';
 const baseUrl = process.env.HOST || `http://localhost:${port}`;
 
 // CORS configuration
@@ -48,7 +47,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `${baseUrl}${apiPrefix}`,
+        url: `${baseUrl}`,
         description: 'API Server'
       }
     ],
@@ -102,19 +101,19 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
 }));
 
 // Routes
-app.use(`${apiPrefix}/todos`, todoRoutes);
+app.use(`/todos`, todoRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     service: 'todo-service',
-    docs: `${baseUrl}/docs`
+    docs: `${baseUrl}`
   });
 });
 
 // Start server
 app.listen(port, () => {
   console.log(`Todo service running on port ${port}`);
-  console.log(`API Documentation available at ${baseUrl}/docs`);
+  console.log(`API Documentation available at ${baseUrl}`);
 }); 
