@@ -8,7 +8,7 @@ COPY package*.json ./
 COPY drizzle.config.ts ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -26,7 +26,7 @@ COPY package*.json ./
 COPY drizzle.config.ts ./
 
 # Install only production dependencies
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
