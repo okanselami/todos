@@ -41,7 +41,8 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 # Run database migrations
-RUN npx drizzle-kit generate:pg --config=drizzle.config.ts && \
+RUN echo "DATABASE_URL=$DATABASE_URL" > .env.production && \
+    npx drizzle-kit generate:pg --config=drizzle.config.ts && \
     npx drizzle-kit push:pg --config=drizzle.config.ts
 
 # Start the application
