@@ -19,14 +19,14 @@ export class TodoService {
     return (await db.select().from(todos).orderBy(todos.createdAt)) as Todo[];
   }
 
-  async getTodoById(id: number): Promise<Todo | undefined> {
+  async getTodoById(id: string): Promise<Todo | undefined> {
     const [todo] = await db.select()
       .from(todos)
       .where(eq(todos.id, id));
     return todo as Todo;
   }
 
-  async updateTodo(id: number, data: Partial<Todo>): Promise<Todo | undefined> {
+  async updateTodo(id: string, data: Partial<Todo>): Promise<Todo | undefined> {
     const [todo] = await db.update(todos)
       .set({
         ...data,
@@ -37,7 +37,7 @@ export class TodoService {
     return todo as Todo;
   }
 
-  async deleteTodo(id: number): Promise<Todo | undefined> {
+  async deleteTodo(id: string): Promise<Todo | undefined> {
     const [todo] = await db.delete(todos)
       .where(eq(todos.id, id))
       .returning();

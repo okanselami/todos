@@ -37,7 +37,7 @@ export const todoController = {
     const { id } = req.params;
 
     try {
-      const todo = await todoService.getTodoById(parseInt(id));
+      const todo = await todoService.getTodoById(id);
 
       if (!todo) {
         return res.status(404).json({ error: 'Todo not found' });
@@ -56,7 +56,7 @@ export const todoController = {
     const { title, description, completed } = req.body;
 
     try {
-      const todo = await todoService.updateTodo(parseInt(id), {
+      const todo = await todoService.updateTodo(id, {
         title,
         description,
         completed,
@@ -78,7 +78,7 @@ export const todoController = {
     const { id } = req.params;
 
     try {
-      const todo = await todoService.deleteTodo(parseInt(id));
+      const todo = await todoService.deleteTodo(id);
 
       if (!todo) {
         return res.status(404).json({ error: 'Todo not found' });
