@@ -89,59 +89,5 @@ export const todoController = {
       console.error('Delete todo error:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
-  },
-
-  // Create multiple todos
-  createBatch: async (req: Request, res: Response) => {
-    const { todos } = req.body;
-
-    if (!Array.isArray(todos) || todos.length === 0) {
-      return res.status(400).json({ error: 'Todos array is required' });
-    }
-
-    try {
-      const createdTodos = await todoService.createBatch(todos);
-      res.status(201).json(createdTodos);
-    } catch (error) {
-      console.error('Create batch todos error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  },
-
-  // Update multiple todos
-  updateBatch: async (req: Request, res: Response) => {
-    const { updates } = req.body;
-
-    if (!Array.isArray(updates) || updates.length === 0) {
-      return res.status(400).json({ error: 'Updates array is required' });
-    }
-
-    try {
-      const updatedTodos = await todoService.updateBatch(updates);
-      res.json(updatedTodos);
-    } catch (error) {
-      console.error('Update batch todos error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  },
-
-  // Delete multiple todos
-  deleteBatch: async (req: Request, res: Response) => {
-    const { ids } = req.body;
-
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({ error: 'Ids array is required' });
-    }
-
-    try {
-      const deletedTodos = await todoService.deleteBatch(ids);
-      res.json({ 
-        message: 'Todos deleted successfully',
-        deletedCount: deletedTodos.length
-      });
-    } catch (error) {
-      console.error('Delete batch todos error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
   }
 }; 
