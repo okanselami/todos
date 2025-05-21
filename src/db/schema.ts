@@ -5,6 +5,7 @@ export const todos = pgTable('todos', {
   id: uuid('id').default(sql`gen_random_uuid()`).primaryKey(),
   title: varchar('title', { length: 255 }).notNull(),
   description: text('description'),
+  priority: varchar('priority', { length: 10 }).default('medium').notNull(),
   completed: boolean('completed').default(false),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),

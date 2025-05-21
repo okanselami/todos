@@ -1,14 +1,15 @@
 import { db } from '../db';
 import { todos } from '../db/schema';
 import { eq } from 'drizzle-orm';
-import { Todo } from '../types/todo';
+import { Todo, Priority } from '../types/todo';
 
 export class TodoService {
-  async createTodo(title: string, description?: string): Promise<Todo> {
+  async createTodo(title: string, description?: string, priority?: Priority): Promise<Todo> {
     const [todo] = await db.insert(todos)
       .values({
         title,
         description,
+        priority,
       })
       .returning();
       

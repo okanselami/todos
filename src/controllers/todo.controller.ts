@@ -6,14 +6,14 @@ const todoService = new TodoService();
 export const todoController = {
   // Create a new todo
   create: async (req: Request, res: Response) => {
-    const { title, description } = req.body;
+    const { title, description, priority } = req.body;
 
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
     }
 
     try {
-      const todo = await todoService.createTodo(title, description);
+      const todo = await todoService.createTodo(title, description, priority);
       res.status(201).json(todo);
     } catch (error) {
       console.error('Create todo error:', error);
@@ -53,13 +53,14 @@ export const todoController = {
   // Update a todo
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { title, description, completed } = req.body;
+    const { title, description, completed, priority } = req.body;
 
     try {
       const todo = await todoService.updateTodo(id, {
         title,
         description,
         completed,
+        priority,
       });
 
       if (!todo) {
