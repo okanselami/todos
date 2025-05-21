@@ -6,8 +6,8 @@
   "scripts": {
     "start": "NODE_ENV=production node dist/index.js",
     "dev": "NODE_ENV=development nodemon -r dotenv/config src/index.ts",
-    "build": "tsc",
-    "test": "jest",
+    "build": "tsc && npm run db:init",
+    "db:init": "NODE_ENV=production node -r dotenv/config ./node_modules/.bin/drizzle-kit generate:pg && NODE_ENV=production node -r dotenv/config ./node_modules/.bin/drizzle-kit push:pg",
     "db:generate": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
     "db:drop": "tsx src/db/drop-table.ts"
