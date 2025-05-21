@@ -34,5 +34,12 @@ COPY --from=builder /app/src ./src
 # Set default environment variables
 ENV NODE_ENV=production
 
+# Accept build arguments for database configuration
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
+# Run database migrations
+RUN npm run db:generate:prod && npm run db:push:prod
+
 # Start the application
 CMD ["npm", "start"]
