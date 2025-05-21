@@ -30,6 +30,8 @@ RUN npm install
 COPY --from=builder /app/dist ./dist
 # Copy source files needed for Swagger documentation
 COPY --from=builder /app/src ./src
+# Copy drizzle config
+COPY --from=builder /app/drizzle.config.ts ./
 
 # Set default environment variables
 ENV NODE_ENV=production
@@ -39,7 +41,8 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 # Run database migrations
-RUN npm run db:generate:prod && npm run db:push:prod
+RUN npx drizzle-kit generate:pg --config=drizzle.config.ts && \
+    npx drizzle-kit push:pg --config=drizzle.config.ts
 
 # Start the application
 CMD ["npm", "start"]
