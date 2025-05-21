@@ -13,8 +13,8 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Build TypeScript code
-RUN npm run build
+# Generate drizzle migrations and build TypeScript code
+RUN npm run db:generate && npm run build
 
 # Production stage
 FROM node:20-alpine
@@ -38,7 +38,6 @@ EXPOSE 3000
 # Create a startup script
 RUN echo '#!/bin/sh\n\
 echo "Running database migrations..."\n\
-npm run db:generate\n\
 npm run db:push\n\
 echo "Starting application..."\n\
 npm start' > /app/start.sh && chmod +x /app/start.sh
