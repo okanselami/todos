@@ -30,7 +30,7 @@ RUN npm install --omit=dev
 COPY --from=builder /app/dist ./dist
 
 # Set default environment variables
-ENV NODE_ENV=production \
+ENV NODE_ENV=production
 
 # Start the application
 CMD ["npm", "start"]
