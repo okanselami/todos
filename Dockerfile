@@ -24,10 +24,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm install 
+RUN npm install
 
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
+# Copy source files needed for Swagger documentation
+COPY --from=builder /app/src ./src
 
 # Set default environment variables
 ENV NODE_ENV=production
