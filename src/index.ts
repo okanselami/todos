@@ -5,14 +5,17 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import dotenv from 'dotenv';
 import todoRoutes from './routes/todo.routes';
+import path from 'path';
 
 // Load environment variables
-dotenv.config();
+dotenv.config({
+  path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`)
+});
 
 const app = express();
 const port = process.env.PORT || 3002;
 const apiPrefix = process.env.API_PREFIX || '/api/v1';
-const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
+const baseUrl = process.env.HOST || `http://localhost:${port}`;
 
 // CORS configuration
 const corsOptions = {

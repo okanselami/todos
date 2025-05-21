@@ -1,7 +1,10 @@
 import { neon } from '@neondatabase/serverless';
 import dotenv from 'dotenv';
+const path = require('path');
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`)
+});
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is required');
