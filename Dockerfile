@@ -1,46 +1,40 @@
-# Build stage
-FROM node:20-alpine AS builder
+# Stage 1: Build the TypeScript code
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy only package files first (to leverage Docker cache)
 COPY package*.json ./
-COPY drizzle.config.ts ./
 
-# Install dependencies
+# Install all dependencies including devDependencies
 RUN npm install
 
-# Copy source code
+# Copy the rest of the source code
 COPY . .
 
-# Build TypeScript code
+# Build the TypeScript code
 RUN npm run build
 
-# Production stage
-FROM node:20-alpine
+# Stage 2: Run the app with only production dependencies
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Copy only production dependencies
 COPY package*.json ./
-COPY drizzle.config.ts ./
+RUN npm install --production
 
-# Install only production dependencies
-RUN npm install --omit=dev
-
-# Copy built files from builder stage
+# Copy built code from builder stage
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/.env.production ./.env.production
 
-# Expose the port your app runs on
+# If your app loads the env file manually:
+# require('dotenv').config({ path: '.env.production' });
+
+# If your app expects process.env vars, set them explicitly or use `--env-file` at runtime
+
+# Expose the port (adjust if needed)
 EXPOSE 3000
 
-# Create a startup script
-RUN echo '#!/bin/sh\n\
-echo "Running database migrations..."\n\
-npm run db:generate\n\
-npm run db:push\n\
-echo "Starting application..."\n\
-npm start' > /app/start.sh && chmod +x /app/start.sh
-
-# Start the application with migrations
-CMD ["/app/start.sh"] 
+# Start the app (uses NODE_ENV=production already)
+CMD ["node", "dist/index.js"]
